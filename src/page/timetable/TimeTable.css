@@ -1,0 +1,16 @@
+.heroTimeTable {
+    background-size: cover;
+    background-attachment: fixed;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    padding-top: 20%;
+    padding-right: 50px;
+    color: #fff;
+    background-color: #a5c9cf;
+}
+.timetable{
+    background-color: #f8f8f8;
+}
