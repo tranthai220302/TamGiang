@@ -1,14 +1,13 @@
 import React from "react";
 import Heading from "../../common/heading/Heading";
 import "./Hero.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Link } from "@mui/material";
 
 const Hero = () => {
-  const history = useHistory();
-
+  const navigate = useNavigate()
   const handleLogin = () => {
-    history.push("/login"); // Replace "/login" with your desired route
+    navigate("/login"); // Replace "/login" with your desired route
   };
 
   return (

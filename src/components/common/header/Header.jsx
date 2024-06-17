@@ -7,7 +7,7 @@ const Header = () => {
   const [click, setClick] = useState(false)
 
   return (
-    <>
+    <div style={{backgroundColor :"#aacdd4"}}>
       <Head />
       <header>
         <nav className='flexSB'>
@@ -37,7 +37,7 @@ const Header = () => {
               <Link to='/contact'>Liện hệ</Link>
             </li>
           </ul>
-          <Link to = '/timetable'>
+          <Link to = '/admin/timetable'>
             <div className='start'>
               <div className='button'>THỜI KHOÁ BIỂU</div>
             </div>
@@ -47,7 +47,7 @@ const Header = () => {
           </button>
         </nav>
       </header>
-    </>
+    </div>
   )
 }
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
-import logo from '../../../ults/image/logo.png'
+import logo from '../../ults/image/logo.png'
 import { Button, Link } from "@mui/material"
 import { useNavigate } from "react-router-dom";
-import Login from "../../../page/login/Login"
+import Login from "../../page/login/Login";
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -17,8 +17,8 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import VillaIcon from '@mui/icons-material/Villa';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import newRequest from "../../../ults/newRequest";
-const Head = () => {
+import newRequest from "../../ults/newRequest";
+const HeadAdmin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null)
   const [user, setUser] = useState(null);
@@ -40,7 +40,7 @@ const Head = () => {
   };
   const handleRoomBook = () => {
     setAnchorEl(null);
-    navigate('/admin/timeTable')
+    navigate('/timeTable')
   };
   const handleHotel = () => {
     setAnchorEl(null);
@@ -162,4 +162,4 @@ const Head = () => {
   )
 }
 
-export default Head
+export default HeadAdmin
