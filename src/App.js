@@ -59,7 +59,7 @@ function App() {
             <Header />
             <Pricing />
             <Footer />
-          </>} />S
+          </>} />
           <Route path='/journal' element={<>
             <Header />
             <Blog />
