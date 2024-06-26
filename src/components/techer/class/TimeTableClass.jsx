@@ -54,7 +54,7 @@ const TimeTableClass = () => {
               {ts.map((period) => (
                 <td key={`${period}-${day}`} style={{ border: '1px solid #ddd', padding: '10px', textAlign: 'center' }}>
                   {timeTable[`${period}-${day}`] && timeTable[`${period}-${day}`].map((lesson, i) => (
-                    lesson?.SchoolClass?.id === user.Teacher.SchoolClass.id &&
+                    lesson?.SchoolClass?.id === user.Teacher.SchoolClass?.id &&
                       <div key={i} style={{ padding: '5px', borderRadius: '5px' }}>
                         <div style={{ fontSize: "14px", fontWeight: '600' }}>{lesson.Subject.name}</div>
                         <div style={{ fontSize: "13px", fontWeight: '400' }}>{lesson.Teacher?.User?.name && (lesson.Teacher?.User?.name)}</div>
