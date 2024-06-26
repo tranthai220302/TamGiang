@@ -1,4 +1,4 @@
-export const clazzs = ['12B1', '12B2', '12B3','12B4', '10B1', '11B1', '11B2'];
+export const clazzs = ['12B1', '12B2', '12B3','10B2', '10B1', '11B1', '11B2'];
 export const days = ['2', '3', '4', '5'];
     export const day1s = ['1','2', '3', '4', '5'];
     export const ts = ['2', '3', '4', '5', '6', '7'];
