@@ -8,11 +8,11 @@ const Footer = () => {
       <section className='newletter'>
         <div className='container flexSB'>
           <div className='left row'>
-            <h1>Newsletter - Stay tune and get the latest update</h1>
-            <span>Far far away, behind the word mountains</span>
+            <h1>Bản tin - Hãy theo dõi và nhận cập nhật mới nhất</h1>
+            <span>Xa xa, sau những dãy núi</span>
           </div>
           <div className='right row'>
-            <input type='text' placeholder='Enter email address' />
+            <input type='text' placeholder='Nhập địa chỉ email' />
             <i className='fa fa-paper-plane'></i>
           </div>
         </div>
@@ -20,36 +20,36 @@ const Footer = () => {
       <footer>
         <div className='container padding'>
           <div className='box logo'>
-            <h1>ACADEMIA</h1>
-            <span>ONLINE EDUCATION & LEARNING</span>
-            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
+            <h1>TAM GIANG</h1>
+            <span>GIÁO DỤC & HỌC TẬP TRỰC TUYẾN</span>
+            <p>Một con sông nhỏ tên Duden chảy qua chỗ của họ và cung cấp cho nó những gì cần thiết.</p>
 
             <i className='fab fa-facebook-f icon'></i>
             <i className='fab fa-twitter icon'></i>
             <i className='fab fa-instagram icon'></i>
           </div>
           <div className='box link'>
-            <h3>Explore</h3>
+            <h3>Khám Phá</h3>
             <ul>
-              <li>About Us</li>
-              <li>Services</li>
-              <li>Courses</li>
+              <li>Về Chúng Tôi</li>
+              <li>Dịch Vụ</li>
+              <li>Khóa Học</li>
               <li>Blog</li>
-              <li>Contact us</li>
+              <li>Liên Hệ</li>
             </ul>
           </div>
           <div className='box link'>
-            <h3>Quick Links</h3>
+            <h3>Liên Kết Nhanh</h3>
             <ul>
-              <li>Contact Us</li>
-              <li>Pricing</li>
-              <li>Terms & Conditions</li>
-              <li>Privacy</li>
-              <li>Feedbacks</li>
+              <li>Liên Hệ</li>
+              <li>Bảng Giá</li>
+              <li>Điều Khoản & Điều Kiện</li>
+              <li>Chính Sách Riêng Tư</li>
+              <li>Phản Hồi</li>
             </ul>
           </div>
           <div className='box'>
-            <h3>Recent Post</h3>
+            <h3>Bài Viết Gần Đây</h3>
             {blog.slice(0, 3).map((val) => (
               <div className='items flexSB'>
                 <div className='img'>
@@ -70,7 +70,7 @@ const Footer = () => {
             ))}
           </div>
           <div className='box last'>
-            <h3>Have a Questions?</h3>
+            <h3>Có Câu Hỏi?</h3>
             <ul>
               <li>
                 <i className='fa fa-map'></i>
@@ -90,7 +90,7 @@ const Footer = () => {
       </footer>
       <div className='legal'>
         <p>
-          Copyright ©2022 All rights reserved | This template is made with <i className='fa fa-heart'></i> by GorkhCoder
+          Bản quyền ©2022 Tất cả các quyền được bảo lưu | Mẫu này được làm với <i className='fa fa-heart'></i> bởi GorkhCoder
         </p>
       </div>
     </>

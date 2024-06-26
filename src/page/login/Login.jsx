@@ -17,6 +17,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import { useState } from 'react';
 import newRequest from '../../ults/newRequest';
 import { useNavigate } from "react-router-dom";
+import { CircularProgress } from '@mui/material';
 const Fade = React.forwardRef(function Fade(props, ref) {
   const {
     children,
@@ -143,7 +144,7 @@ export default function Login({ setUser }) {
                     required
                     fullWidth
                     id="email"
-                    label="Email Address"
+                    label="Nhập email"
                     name="email"
                     autoComplete="email"
                     autoFocus
@@ -153,14 +154,15 @@ export default function Login({ setUser }) {
                     required
                     fullWidth
                     name="password"
-                    label="Password"
+                    label="Mật khẩu"
                     type="password"
                     id="password"
                     autoComplete="current-password"
                   />
+                    {error && <span style={{fontSize : '12px', color : 'red', fontStyle : 'italic'}}>Tài khoản hoặc mật khẩu không chính xác</span>}
                   <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
+                    label="Nhớ mật khẩu"
                   />
                   <Button
                     fullWidth
@@ -168,7 +170,9 @@ export default function Login({ setUser }) {
                     style={{ marginTop: 25, marginBottom: 20 }}
                     type='submit'
                   >
-                    Đăng nhập
+                    {!isLoading ? "Đăng nhập" : (
+                      <div><CircularProgress style={{color : 'white', fontSize : '12px'}}/></div>
+                    )}
                   </Button>
                   <Grid container>
                     <Grid item xs>
@@ -178,7 +182,7 @@ export default function Login({ setUser }) {
                     </Grid>
                     <Grid item>
                       <Link href="/register" variant="body2">
-                        {"Don't have an account? Sign Up"}
+                        {"Bạn chưa có tài khoản? Đăng ký"}
                       </Link>
                     </Grid>
                   </Grid>

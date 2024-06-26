@@ -134,12 +134,6 @@ const HeadTeacher = () => {
                         <Avatar><VillaIcon/></Avatar> Thời khoá biểu
                       </MenuItem>
                       <Divider />
-                      <MenuItem onClick={handleHotel}>
-                        <ListItemIcon>
-                          <FavoriteIcon fontSize="small"/>
-                        </ListItemIcon>
-                        Đã lưu
-                      </MenuItem>
                       <MenuItem onClick={handleLogout}>
                         <ListItemIcon>
                           <Logout fontSize="small" />
