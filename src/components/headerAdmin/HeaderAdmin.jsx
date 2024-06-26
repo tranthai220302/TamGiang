@@ -18,13 +18,13 @@ const HeaderAdmin = () => {
               <Link to='/admin/class'>Lớp Học</Link>
             </li>
             <li style={{fontSize : '14px', fontWeight : '700'}}>
-              <Link to='/admin/teacher'>Tin Tức</Link>
-            </li>
-            <li style={{fontSize : '14px', fontWeight : '700'}}>
               <Link to='/admin/event'>Sự Kiện</Link>
             </li>
             <li style={{fontSize : '14px', fontWeight : '700'}}>
               <Link to='/admin/teacher'>Khoa</Link>
+            </li>
+            <li style={{fontSize : '14px', fontWeight : '700'}}>
+              <Link to='/admin/confirm/vaction'>Duyệt ngày nghỉ</Link>
             </li>
             <li style={{fontSize : '14px', fontWeight : '700'}}>
               <Link to='/admin/data'>Thêm dữ liệu</Link>

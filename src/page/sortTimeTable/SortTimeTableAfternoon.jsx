@@ -77,40 +77,60 @@ const ScheduleAfternoon = () => {
         const worksheet = workbook.addWorksheet('Thời khóa biểu');
         const header = ['', '', ...clazzs];
         worksheet.columns = [
-            { width: 15 }, // Độ rộng cột đầu tiên
-            { width: 15 }, // Độ rộng cột thứ hai
-            ...clazzs.map(() => ({ width: 20 })) // Độ rộng cho các cột còn lại
+            { width: 15 }, 
+            { width: 15 }, 
+            ...clazzs.map(() => ({ width: 20 })) 
         ];
         worksheet.addRow(header);
 
-        // Thêm các hàng dữ liệu
         ts.forEach(t => {
             day1s.forEach((day, index) => {
-                // if (index === 0) {
-                //     worksheet.addRow([`Thứ ${t}`, `Tiết ${1}`, ...Array(clazzs.length).fill('')]);
-                // }
+                if (index === 0) {
+                    const row = [`Thứ ${t}`, `Tiết ${1}`];
 
-                const row = [``, `Tiết ${day}`];
-
-                clazzs.forEach(clazz => {
-                    let cellData = '';
-                    if (timeTable[`${t}-${day}`]) {
-                        const lesson = timeTable[`${t}-${day}`].find(lesson => lesson.SchoolClass.name === clazz);
-                        if (lesson && !lesson?.Subject?.name?.includes("Check")) {
-                            cellData = [
-                                { text: lesson.Subject.name, font: { size: 10, bold: true } },
-                                ...(lesson.Teacher?.User?.name ? [{ text: `\n${lesson.Teacher.User.name}`, font: { size: 8, italic: true } }] : [])
-                            ];
+                    clazzs.forEach(clazz => {
+                        let cellData = '';
+                        if (timeTable[`${t}-1`]) {
+                            const lesson = timeTable[`${t}-1`].find(lesson => lesson.SchoolClass.name === clazz);
+                            if (lesson && !lesson?.Subject?.name?.includes("Check")) {
+                                cellData = [
+                                    { text: lesson.Subject.name, font: { size: 10, bold: true } },
+                                    ...(lesson.Teacher?.User?.name ? [{ text: `\n${lesson.Teacher.User.name}`, font: { size: 8, italic: true } }] : [])
+                                ];
+                            }
                         }
-                    }
-                    if (cellData.length > 0) {
-                        row.push({ richText: cellData });
-                    } else {
-                        row.push('');
-                    }
-                });
+                        if (cellData.length > 0) {
+                            row.push({ richText: cellData });
+                        } else {
+                            row.push('');
+                        }
+                    });
+    
+                    worksheet.addRow(row);
+                }else{
+                    const row = [``, `Tiết ${day}`];
 
-                worksheet.addRow(row);
+                    clazzs.forEach(clazz => {
+                        let cellData = '';
+                        if (timeTable[`${t}-${day}`]) {
+                            const lesson = timeTable[`${t}-${day}`].find(lesson => lesson.SchoolClass.name === clazz);
+                            if (lesson && !lesson?.Subject?.name?.includes("Check")) {
+                                cellData = [
+                                    { text: lesson.Subject.name, font: { size: 10, bold: true } },
+                                    ...(lesson.Teacher?.User?.name ? [{ text: `\n${lesson.Teacher.User.name}`, font: { size: 8, italic: true } }] : [])
+                                ];
+                            }
+                        }
+                        if (cellData.length > 0) {
+                            row.push({ richText: cellData });
+                        } else {
+                            row.push('');
+                        }
+                    });
+    
+                    worksheet.addRow(row);
+                }
+
             });
             worksheet.addRow(Array(clazzs.length + 2).fill(''));
         });

@@ -252,7 +252,7 @@ const AddData = () => {
                             <th style={{ ...styles.th, ...styles.thTd }}>Số Tiết</th>
                             <th style={{ ...styles.th, ...styles.thTd, position: 'relative' }}>Giáo Viên</th>
                             <th style={{ ...styles.th, ...styles.thTd }}>Xoá</th>
-                            <th style={{ ...styles.th, ...styles.thTd }}>Chỉnh sửa</th>
+                            {/* <th style={{ ...styles.th, ...styles.thTd }}>Chỉnh sửa</th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -287,9 +287,9 @@ const AddData = () => {
                                 <td style={styles.thTd}>
                                     <Button variant='outlined' onClick={()=>{deleteSchedule(row.id)}}><DeleteIcon /></Button>
                                 </td>
-                                <td style={styles.thTd}>
+                                {/* <td style={styles.thTd}>
                                     <Button variant='outlined'><EditIcon /></Button>
-                                </td>
+                                </td> */}
                             </tr>
                         ))}
                     </tbody>

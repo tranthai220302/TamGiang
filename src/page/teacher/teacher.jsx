@@ -7,7 +7,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import BasicTable from '../../components/table/table';
-import { clazzs, days, ts, tableStyle, cellStyle, thStyle, thSecondChildStyle, thFirstChildStyle, style } from '../sortTimeTable/data';
+import { clazzs, days, ts, tableStyle, cellStyle, thStyle, thSecondChildStyle, thFirstChildStyle, style, day1s } from '../sortTimeTable/data';
+import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
+
 const Teacher = () => {
     const [timeTable, setTimeTable] = useState({});
     const [isLoading, setIsLoading] = useState(false);
@@ -74,6 +78,85 @@ const Teacher = () => {
     // Logic chuyển trang
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    const exportToExcel = async () => {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Thời khóa biểu');
+        const header = ['', '', ...teachers.map(teacher => teacher.User.name)];
+        worksheet.columns = [
+            { width: 15 },
+            { width: 15 },
+            ...teachers.map(() => ({ width: 10 }))
+        ];
+        worksheet.addRow(header);
+
+        ts.forEach(t => {
+            day1s.forEach((day, index) => {
+                const row = index === 0
+                    ? [`Thứ ${t}`, `Tiết ${1}`]
+                    : ['', `Tiết ${day}`];
+
+                teachers.forEach(teacher => {
+                    let cellData = '';
+                    const lesson = timeTable[`${t}-${day}`] ? timeTable[`${t}-${day}`].find(lesson => lesson.TeacherId === teacher.id) : null;
+                    if (lesson && lesson.Subject && !lesson.Subject.name.includes("Check")) {
+                        cellData = [
+                            { text: lesson.Subject.name, font: { size: 10, bold: true } },
+                            ...(lesson.SchoolClass ? [{ text: `\n(${lesson.SchoolClass.name})`, font: { size: 8, italic: true } }] : [])
+                        ];
+                    }
+                    if (cellData.length > 0) {
+                        row.push({ richText: cellData });
+                    } else {
+                        row.push('');
+                    }
+                });
+
+                worksheet.addRow(row);
+            });
+            worksheet.addRow(Array(teachers.length + 2).fill(''));
+        });
+
+        // Định dạng các ô
+        worksheet.eachRow((row, rowNumber) => {
+            row.eachCell((cell, colNumber) => {
+                cell.font = {
+                    name: 'Arial',
+                    size: 7,
+                    bold: rowNumber === 1 // Dòng tiêu đề in đậm
+                };
+                cell.alignment = {
+                    vertical: 'middle',
+                    horizontal: 'center',
+                    wrapText: true
+                };
+                cell.border = {
+                    top: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    left: { style: 'thin' },
+                    right: { style: 'thin' }
+                };
+                if (rowNumber === 1) {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'FFaacdd4' }
+                    };
+                }
+            });
+            const firstCell = row.getCell(1);
+            firstCell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'FFaacdd4' } // Màu nền vàng cho cột đầu tiên
+            };
+        });
+
+        // Xuất file Excel
+        const buffer = await workbook.xlsx.writeBuffer();
+        const dataBlob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        saveAs(dataBlob, 'ThoiKhoaBieu.xlsx');
+    }
+
     return (
         <div className='container' style={{ padding: "20px 0" }}>
             <Backdrop
@@ -88,6 +171,9 @@ const Teacher = () => {
                 </button>
                 <button onClick={() => { generateTimeTable(0) }}>
                     Thời khoá biểu buổi chiều
+                </button>
+                <button onClick={exportToExcel}>
+                    Xuất Excel
                 </button>
                 {run && run.length > 0 && (
                     <div>
@@ -120,7 +206,7 @@ const Teacher = () => {
                     {ts.map(t => (
                         <React.Fragment key={t}>
                             <tr>
-                                <td rowspan="5" style={{ ...cellStyle, fontSize: '12px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }}>Thứ {t}</td>
+                                <td rowSpan="5" style={{ ...cellStyle, fontSize: '12px', fontWeight: 'bold', backgroundColor: '#f2f2f2' }}>Thứ {t}</td>
                                 <td style={cellStyle}>T.1</td>
                                 {currentTeachers.map((teacher, i) => {
                                     let count = 0;
@@ -187,9 +273,9 @@ const Teacher = () => {
                 </tbody>
             </table>
             {/* Nút chuyển trang */}
-            <div style={{ marginTop: '10px', display : 'flex', justifyContent : 'center' }}>
+            <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}>
                 {teachers.length > 0 && (
-                    <ul className="pagination" style={{display : 'flex'}}>
+                    <ul className="pagination" style={{ display: 'flex' }}>
                         {Array.from({ length: Math.ceil(teachers.length / teachersPerPage) }, (_, i) => (
                             <li key={i} className="page-item">
                                 <button onClick={() => paginate(i + 1)} className="page-link">

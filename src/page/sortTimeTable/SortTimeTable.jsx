@@ -9,12 +9,15 @@ import Modal from '@mui/material/Modal';
 import { useNavigate } from 'react-router-dom';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
-import { clazzs, days, ts, tableStyle, cellStyle, thStyle, thSecondChildStyle, thFirstChildStyle, style } from './data';
+import { clazzs, days, ts, tableStyle, cellStyle, thStyle, thSecondChildStyle, thFirstChildStyle, style, day1s } from './data';
 import BasicTable from '../../components/table/table';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import TableReason from '../../components/table/TableReason';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
+
 const LightTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
@@ -37,6 +40,7 @@ const HtmlTooltip = styled(({ className, ...props }) => (
         border: '1px solid #dadde9',
     },
 }));
+
 const Schedule = () => {
     const [timeTable, setTimeTable] = useState({});
     const [open1, setOpen1] = useState(false);
@@ -46,9 +50,11 @@ const Schedule = () => {
     const [startDate, setStartDate] = useState(null);
     const [reason, setReason] = useState([]);
     const navigate = useNavigate();
+    
     useEffect(() => {
         generateTimeTable();
     }, []);
+    
     const sortTimeTable = (date) => {
         setIsLoading(true);
         newRequest.get(`/schedule/sort?date=${date}`)
@@ -61,6 +67,7 @@ const Schedule = () => {
                 console.log(error);
             })
     }
+    
     const generateTimeTable = (date) => {
         setIsLoading(true);
         newRequest.get(`/schedule/generate?date=${date}`)
@@ -73,6 +80,7 @@ const Schedule = () => {
                 setIsLoading(false);
             });
     }
+    
     const getReasonsByDate = (date) => {
         setIsLoading(true);
         newRequest.get(`/reason/date?date=${date}`)
@@ -87,6 +95,109 @@ const Schedule = () => {
             });
     }
 
+    const exportToExcel = async () => {
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Thời khóa biểu');
+        const header = ['', '', ...clazzs];
+        worksheet.columns = [
+            { width: 15 }, 
+            { width: 15 }, 
+            ...clazzs.map(() => ({ width: 20 })) 
+        ];
+        worksheet.addRow(header);
+
+        ts.forEach(t => {
+            day1s.forEach((day, index) => {
+                if (index === 0) {
+                    const row = [`Thứ ${t}`, `Tiết ${1}`];
+
+                    clazzs.forEach(clazz => {
+                        let cellData = '';
+                        if (timeTable[`${t}-1`]) {
+                            const lesson = timeTable[`${t}-1`].find(lesson => lesson.SchoolClass.name === clazz);
+                            if (lesson && !lesson?.Subject?.name?.includes("Check")) {
+                                cellData = [
+                                    { text: lesson.Subject.name, font: { size: 10, bold: true } },
+                                    ...(lesson.Teacher?.User?.name ? [{ text: `\n${lesson.Teacher.User.name}`, font: { size: 8, italic: true } }] : [])
+                                ];
+                            }
+                        }
+                        if (cellData.length > 0) {
+                            row.push({ richText: cellData });
+                        } else {
+                            row.push('');
+                        }
+                    });
+    
+                    worksheet.addRow(row);
+                }else{
+                    const row = [``, `Tiết ${day}`];
+
+                    clazzs.forEach(clazz => {
+                        let cellData = '';
+                        if (timeTable[`${t}-${day}`]) {
+                            const lesson = timeTable[`${t}-${day}`].find(lesson => lesson.SchoolClass.name === clazz);
+                            if (lesson && !lesson?.Subject?.name?.includes("Check")) {
+                                cellData = [
+                                    { text: lesson.Subject.name, font: { size: 10, bold: true } },
+                                    ...(lesson.Teacher?.User?.name ? [{ text: `\n${lesson.Teacher.User.name}`, font: { size: 8, italic: true } }] : [])
+                                ];
+                            }
+                        }
+                        if (cellData.length > 0) {
+                            row.push({ richText: cellData });
+                        } else {
+                            row.push('');
+                        }
+                    });
+    
+                    worksheet.addRow(row);
+                }
+
+            });
+            worksheet.addRow(Array(clazzs.length + 2).fill(''));
+        });
+
+        // Định dạng các ô
+        worksheet.eachRow((row, rowNumber) => {
+            row.eachCell((cell, colNumber) => {
+                cell.font = {
+                    name: 'Arial',
+                    size: 10,
+                    bold: rowNumber === 1 // Dòng tiêu đề in đậm
+                };
+                cell.alignment = {
+                    vertical: 'middle',
+                    horizontal: 'center',
+                    wrapText: true
+                };
+                cell.border = {
+                    top: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    left: { style: 'thin' },
+                    right: { style: 'thin' }
+                };
+                if (rowNumber === 1) {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'FFaacdd4' }
+                    };
+                }
+            });
+            const firstCell = row.getCell(1);
+            firstCell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: 'FFaacdd4' } // Màu nền vàng cho cột đầu tiên
+            };
+        });
+
+        // Xuất file Excel
+        const buffer = await workbook.xlsx.writeBuffer();
+        const dataBlob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        saveAs(dataBlob, 'ThoiKhoaBieu.xlsx');
+    }
 
     return (
         <div className='container'>
@@ -150,6 +261,9 @@ const Schedule = () => {
                 </button>
                 <button onClick={() => { setOpen1(true) }}>
                     Danh sách ngày nghỉ giáo viên
+                </button>
+                <button onClick={exportToExcel}>
+                    Xuất file Excel
                 </button>
                 <Modal
                     open={open1}

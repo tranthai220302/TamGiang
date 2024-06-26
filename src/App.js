@@ -26,6 +26,7 @@ import AddData from "./page/homeAdmin/data/AddData";
 import TKB from "./page/TKB/TKB";
 import ScheduleAfternoon from "./page/sortTimeTable/SortTimeTableAfternoon";
 import TimeTableClass from "./components/techer/class/TimeTableClass";
+import ConfirmVaction from "./page/homeAdmin/comfirm/ConfirmVacation";
 
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('currentUser')));
@@ -120,6 +121,13 @@ function App() {
             <Route path='/admin/event' element={<>
               <HeaderAdmin />
               <Event />
+              <Footer />
+            </>} />
+          )}
+          {user && !user.Teacher && (
+            <Route path='/admin/confirm/vaction' element={<>
+              <HeaderAdmin />
+              <ConfirmVaction/>
               <Footer />
             </>} />
           )}
